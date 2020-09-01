@@ -261,9 +261,68 @@
 
         In [39]: a is not c
         Out[39]: True
+    - since **list** always creates new Python list, c is distint from a
+    - comparing with is is not the same as the == operator because in that case a == c is true
+    - common use of is and is not is to check if variable is **none** since there is only one instance of none
+      In [41]: a = None
+
+      In [42]: a is None
+      Out[42]: True
+  - common operators
+      a + b	Add a and b
+      a - b	Subtract b from a
+      a * b	Multiply a by b
+      a / b	Divide a by b
+      a // b	Floor-divide a by b, dropping any fractional remainder
+      a ** b	Raise a to the b power
+      a & b	True if both a and b are True; for integers, take the bitwise AND
+      a | b	True if either a or b is True; for integers, take the bitwise OR
+      a ^ b	For booleans, True if a or b is True, but not both; for integers, take the bitwise EXCLUSIVE-OR
+      a == b	True if a equals b
+      a != b	True if a is not equal to b
+      a <= b, a < b	True if a is less than (less than or equal) to b
+      a > b, a >= b	True if a is greater than (greater than or equal) to b
+      a is b	True if a and b reference the same Python object
+      a is not b	True if a and b reference different Python objects
  
  
+ - Mutable and immutable objects
+  - most objects like lists, dicts, NumPy arrays, and user defined types are mutable (can be changed)
+      In [43]: a_list = ['foo', 2, [4, 5]]
+
+      In [44]: a_list[2] = (3, 4)
+
+      In [45]: a_list
+      Out[45]: ['foo', 2, (3, 4)]
+  - strings and tuples are not    
+      In [46]: a_tuple = (3, 5, (4, 5))
+
+      In [47]: a_tuple[1] = 'four'
+  - Just because you can mutate an object doesn't mean you should b/c of side effects
+  
+- Scalar types
+  - built in types for handling numerical data, strings, boolean values, dates and times. "Single value" or *scalar types*
+  - standard scalar types
+    None	The Python “null” value (only one instance of the None object exists)
+    str	String type; holds Unicode (UTF-8 encoded) strings
+    bytes	Raw ASCII bytes (or Unicode encoded as bytes)
+    float	Double-precision (64-bit) floating-point number (note there is no separate double type)
+    bool	A True or False value
+    int	Arbitrary precision signed integer
  
+- numeric types 
+  - primary are **int** and **float**
+  - int can store arbitrary large numbers
+      In [48]: ival = 17239871
+
+      In [49]: ival ** 6
+      Out[49]: 26254519291092456596965462913230729701102721  
+  - floats have decimals
+  - in division not resulting in whole number will yield float
+  - use **//** to drop fractional part if result is not whole number
+  
+- strings
+  
  
  
  
