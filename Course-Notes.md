@@ -322,7 +322,203 @@
   - use **//** to drop fractional part if result is not whole number
   
 - strings
+  - can write string literals using single or double quotes
+    a = 'one way of writing a string'
+    b = "another way"
+  - multiple strings with line breaks use triple quotes
+    c = """
+    This is a longer string that
+    spans multiple lines
+    """
+  - that actually contains 4 lines. Can count the new line caracters with the count method
+    In [55]: c.count('\n')
+    Out[55]: 3
+  - cannot modify strings
+  - can convert objects to string using str function
+    In [61]: a = 5.6
+    In [62]: s = str(a)
+    In [63]: print(s)
+    5.6
+  - are a sequence of Unicode characters and can be treated like other sequences like tuples and lists.
+  In [64]: s = 'python'
+  In [65]: list(s)
+  Out[65]: ['p', 'y', 't', 'h', 'o', 'n']
+  In [66]: s[:3]
+  Out[66]: 'pyt'
+ - where s[:3] is called slicing 
+ - backslash \ is an escape character. Used to soecify characters like newline \n or Unicode characters. Need to escape string with literal backslashes
+  In [67]: s = '12\\34'
+  In [68]: print(s)
+  12\34
+- if you need a lot of backslashes you can lead the quoted string with r to make it interpret characters as is
+    In [69]: s = r'this\has\no\special\characters'
+    In [70]: s
+    Out[70]: 'this\\has\\no\\special\\characters'
+   - the r stands for raw
+- adding two strings together concatenates them and produces new string
+    In [71]: a = 'this is the first half '
+    In [72]: b = 'and this is the second half'
+    In [73]: a + b
+    Out[73]: 'this is the first half and this is the second half'
+- format method can be used to substitute formated arguments into the string to produce a new string
+    In [74]: template = '{0:.2f} {1:s} are worth US${2:d}'
+  • {0:.2f} means to format the first argument as a floating-point number with two decimal places.
+  • {1:s} means to format the second argument as a string.
+  • {2:d} means to format the third argument as an exact integer.
+- to substitue arguments, pass sequence of arguments to the format method
+    In [75]: template.format(4.5560, 'Argentine Pesos', 1)
+    Out[75]: '4.56 Argentine Pesos are worth US$1'
+
+- Bytes and unicode 
+  - Unicode used to enable consistent handling of ASCII and non-ASCII text 
+  - can sometimes encounter data in different encodings and will have to convert
   
+- Booleans
+  - comparisons and other conditional expressions evaluate to true or false
+  - boolean values combined with and and or keywords
+  - Type casting 
+    - str, bool, int, and float types are functions that can cast values to those types
+    In [91]: s = '3.14159'
+    In [92]: fval = float(s)
+    In [93]: type(fval)
+    Out[93]: float
+    In [94]: int(fval)
+    Out[94]: 3
+    In [95]: bool(fval)
+    Out[95]: True
+    In [96]: bool(0)
+    Out[96]: False
+  - none is the python null value. If a function does not explicitly retuurn a value it returns none
+    In [97]: a = None
+    In [98]: a is None
+    Out[98]: True
+    In [99]: b = 5
+    In [100]: b is not None
+    Out[100]: True
+  - None is also a common default value for function arguments:
+    def add_and_maybe_multiply(a, b, c=None):
+      result = a + b
+      
+      if c is not None:
+        result = result * c
+        
+      return result
+ 
+ - dates and times
+  - datetime, date, and time types
+    - datetime combines data and time and is most commonly used 
+      In [102]: from datetime import datetime, date, time
+      In [103]: dt = datetime(2011, 10, 29, 20, 30, 21)
+      In [104]: dt.day
+      Out[104]: 29
+      In [105]: dt.minute
+      Out[105]: 30
+    - can extract equivalent date and time objects by calling methods on the datetime of the same name
+      In [107]: dt.time()
+      Out[107]: datetime.time(20, 30, 21)
+    - lots of other datetime stuff
+    
+- Control Flow
+  - built in keywords for conditional logic, loops, and other standard concepts
+  - if, elif, and else
+    - if checks a condition that, if True, evaluates code that follows
+      if x < 0:
+        print('It's negative')
+      - can be followed by elif blocks and a catch all else if all conditions are false
+      if x < 0:
+        print('It's negative')
+      elif x == 0:
+        print('Equal to zero')
+      elif 0 < x < 5:
+        print('Positive but smaller than 5')
+      else:
+        print('Positive and larger than or equal to 5')
+   - if any conditions are True, no further elif or else will be reached 
+   - compound conditions using and or or are read left to life and will short circuit
+    In [117]: a = 5; b = 7
+    In [118]: c = 8; d = 4
+    In [119]: if a < b or c > d:
+    .....: print('Made it')
+    Made it
+      - comparison c > d never gets evaluated because the first comparison was True
+      - also possible to chain comparisons
+        In [120]: 4 > 3 > 2 > 1
+        Out[120]: True
+    - for loops - iterate over a collection (like list or tuple) or an iterator
+        for value in collection:
+        ###### do something with value
+      - can advance a for loop to the next iteration, skipping remainder with the continue keyword
+      - sums integers in list and skips none values
+          sequence = [1, 2, None, 4, None, 5]
+          total = 0
+          for value in sequence:
+            if value is None:
+                continue
+            total += value
+     - for loop can be exited with break keyword
+        sequence = [1, 2, 0, 4, 6, 5, 2, 1]
+        total_until_5 = 0
+        for value in sequence:
+          if value == 5:
+            break
+          total_until_5 += value
+      - break only terminates the innermost for loop. Outer will continue
+- while loops specify a condition and a block of code that goes until False or ended with break
+    x = 256
+    total = 0
+    while x > 0:
+      if total > 500:
+        break
+      total += x
+      x = x // 2
+  - pass is the no-op statement. Used in blocks where no action is taken. Required becuause whitespace is a delimeter
+    if x < 0:
+      print('negative!')
+    elif x == 0:
+      ###### TODO: put something smart here
+      pass
+    else:
+      print('positive!')
+  - range - returns an iterator that yields a sequence of evenly spaced integers
+      In [122]: range(10)
+      Out[122]: range(0, 10)
+      In [123]: list(range(10))
+      Out[123]: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+    -start, end, and step can be given
+      In [124]: list(range(0, 20, 2))
+      Out[124]: [0, 2, 4, 6, 8, 10, 12, 14, 16, 18]
+      In [125]: list(range(5, 0, -1))
+      Out[125]: [5, 4, 3, 2, 1]
+    -produces integers up to but not including the endpoint. Commonly used for iterating through sequences by index
+      seq = [1, 2, 3, 4]
+      for i in range(len(seq)):
+        val = seq[i]
+    -list can store all the integers generated by range in some other data structure, often the default iterator 
+    -sums all numbers from 0 to 99,999 that are multiples of 3 or 5
+      sum = 0
+      for i in range(100000):
+        # % is the modulo operator
+        if i % 3 == 0 or i % 5 == 0:
+          sum += i
+   - ternary expressions - combine if-else block that produces value into single line or expression
+    value = true-expr if condition else false-expr
+    
+    In [126]: x = 5
+    In [127]: 'Non-negative' if x >= 0 else 'Negative'
+    Out[127]: 'Non-negative'
+  - may sacrifice readability if the condition as well as the true and false are complex
+
+
+    
+
+
+  
+
+  
+
+
+
+
  
  
  
