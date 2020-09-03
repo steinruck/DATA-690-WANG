@@ -509,6 +509,27 @@
   - may sacrifice readability if the condition as well as the true and false are complex
 
 
+# Week 2
+## Chapter 3
+
+Tuples
+- fixed length immutable sequence of python objects. Should be enclosed in parentheses if more complicated
+  tup = 4, 5, 6
+  nested_tup = (4, 5, 6), (6, 7)
+- can convert any sequence or iterator to tuple by invoking tuple
+  tuple([4, 0, 2])
+  tup = tuple('string') # will convert to ('s', 't', 'r', 'i', 'n', 'g')
+- elements can be accessed with square brackets and are 0 indexed
+- objects in stored tuple may be mutable themselves but once tuple is created it is not possible to modify which object is stored in each slot
+  tup = tuple(['foo', [1, 2], True])
+  tup[2] = False #### gives an error
+ - if there is a list in a tuple it can be modified in place
+  tup[1].append(3)
+  tup 
+  (out) ('foo', [1, 2, 3], True)
+- can concantenate tuples using the + operator
+  (3, None, 'foo') + (6, 0) + ('bar',)
+- 
     
 
 
