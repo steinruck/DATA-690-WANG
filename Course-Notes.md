@@ -93,7 +93,7 @@
   - IPython promt is *In [1]* - can be launced just like python
   - when you type just a variable into IPython, it renders a string representation of that object
   - to start Jupyter type **jupyter** - many platforms it auto opens the web browser unless you start with --no-browser
-    - otherwise you can go to the address that is printed when you started the notebook
+    ~ otherwise you can go to the address that is printed when you started the notebook
   - explains how to start new notebook - like running notebooks.ai
   - author's repository on github - *wesm/pydata-book*
   
@@ -153,16 +153,16 @@
   
 - Variables and argument passing
   - variables (names) create references to th eobject on the right side of the equals sign
-    -  In [8]: a = [1, 2, 3]
+    ~  In [8]: a = [1, 2, 3]
        In [9]: b = a
-     - a and b now refer to the same object, the original list
-     - can test by appending to a and examining b
-    - In[10]: a.append(4)
-    - In[11]: b
+     ~ a and b now refer to the same object, the original list
+     ~ can test by appending to a and examining b
+    ~ In[10]: a.append(4)
+    ~ In[11]: b
   - when you pass objects as arguments to a function, new local variables are created referencing the original objects without any copying
-    - if you bind a new object to a variable inside a function, the change will not reflect in parent
+    ~ if you bind a new object to a variable inside a function, the change will not reflect in parent
   - object references in Python have no type associated with them
-    - In [12]: a = 5
+    ~ In [12]: a = 5
 
       In [13]: type(a)
       Out[13]: int
@@ -171,9 +171,9 @@
 
       In [15]: type(a)
       Out[15]: str
-    - variables are names for objects in a namespace. The type of info is stored in the object itself
-    - every object has a specific type (or class), and implicit conversions will occur onlu in certain obvious circumstances
-      - In [17]: a = 4.5
+    ~ variables are names for objects in a namespace. The type of info is stored in the object itself
+    ~ every object has a specific type (or class), and implicit conversions will occur onlu in certain obvious circumstances
+      ~ In [17]: a = 4.5
 
         In [18]: b = 2
 
@@ -183,12 +183,12 @@
 
         In [20]: a / b
         Out[20]: 2.25
-    - knowing the type of an object is important. Can check that an object is an instance of a type using the isinstance function
+    ~ knowing the type of an object is important. Can check that an object is an instance of a type using the isinstance function
         - In [21]: a = 5
 
           In [22]: isinstance(a, int)
           Out[22]: True
-      - can use isinstance with a tuple of types to check if an object's type is in the tuple
+      ~ can use isinstance with a tuple of types to check if an object's type is in the tuple
         - In [23]: a = 5; b = 4.5
 
           In [24]: isinstance(a, (int, float))
@@ -211,7 +211,7 @@
 - duck typing
   - don't care about the type, just whether it has certain methods or behavior
   - For example, you can verify that an object is iterable if it implemented the iterator protocol. For many objects, this means it has a __iter__ “magic method”
-    - alternative and better way to check is to try using the iter function:
+    ~ alternative and better way to check is to try using the iter function:
       def isiterable(obj):
     try:
         iter(obj)
@@ -222,9 +222,9 @@
     In [29]: isiterable('a string')
     Out[29]: True
     
-    - this is useful when writing functions that cna accept multiple kinds of input
-      - writing a function that can accept any sequence (list, tuple, ndarray) or an iterator
-      - check if object is a list (or NumPy array) and if not, convert to one
+    ~ this is useful when writing functions that cna accept multiple kinds of input
+      ~ writing a function that can accept any sequence (list, tuple, ndarray) or an iterator
+      ~ check if object is a list (or NumPy array) and if not, convert to one
       if not isinstance(x, list) and isiterable(x):
            x = list(x)
            
@@ -377,7 +377,7 @@
   - comparisons and other conditional expressions evaluate to true or false
   - boolean values combined with and and or keywords
   - Type casting 
-    - str, bool, int, and float types are functions that can cast values to those types
+    ~ str, bool, int, and float types are functions that can cast values to those types
     In [91]: s = '3.14159'
     In [92]: fval = float(s)
     In [93]: type(fval)
@@ -421,10 +421,10 @@
 - Control Flow
   - built in keywords for conditional logic, loops, and other standard concepts
   - if, elif, and else
-    - if checks a condition that, if True, evaluates code that follows
+    ~ if checks a condition that, if True, evaluates code that follows
       if x < 0:
         print('It's negative')
-      - can be followed by elif blocks and a catch all else if all conditions are false
+      ~ can be followed by elif blocks and a catch all else if all conditions are false
       if x < 0:
         print('It's negative')
       elif x == 0:
@@ -447,8 +447,8 @@
     - for loops - iterate over a collection (like list or tuple) or an iterator
         for value in collection:
         ###### do something with value
-      - can advance a for loop to the next iteration, skipping remainder with the continue keyword
-      - sums integers in list and skips none values
+      ~ can advance a for loop to the next iteration, skipping remainder with the continue keyword
+      ~ sums integers in list and skips none values
           sequence = [1, 2, None, 4, None, 5]
           total = 0
           for value in sequence:
