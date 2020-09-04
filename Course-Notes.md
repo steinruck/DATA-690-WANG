@@ -119,21 +119,21 @@
   - %timeit - checks execution time of any Python statement
   - don't seem to work in notebooks.ai?
   - frequent commands
-    %quickref	Display the IPython Quick Reference Card
-    %magic	Display detailed documentation for all of the available magic commands
-    %debug	Enter the interactive debugger at the bottom of the last exception traceback
-    %hist	Print command input (and optionally output) history
-    %pdb	Automatically enter debugger after any exception
-    %paste	Execute preformatted Python code from clipboard
-    %cpaste	Open a special prompt for manually pasting Python code to be executed
-    %reset	Delete all variables/names defined in interactive namespace
-    %page OBJECT	Pretty-print the object and display it through a pager
-    %run script.py	Run a Python script inside IPython
-    %prun statement	Execute statement with cProfile and report the profiler output
-    %time statement	Report the execution time of a single statement
-    %timeit statement	Run a statement multiple times to compute an ensemble average execution time; useful for timing code with very short execution time
-    %who, %who_ls, %whos	Display variables defined in interactive namespace, with varying levels of information/verbosity
-    %xdel variable	Delete a variable and attempt to clear any references to the object in the IPython internals
+    - %quickref	Display the IPython Quick Reference Card
+    - %magic	Display detailed documentation for all of the available magic commands
+    - %debug	Enter the interactive debugger at the bottom of the last exception traceback
+    - %hist	Print command input (and optionally output) history
+    - %pdb	Automatically enter debugger after any exception
+    - %paste	Execute preformatted Python code from clipboard
+    - %cpaste	Open a special prompt for manually pasting Python code to be executed
+    - %reset	Delete all variables/names defined in interactive namespace
+    - %page OBJECT	Pretty-print the object and display it through a pager
+    - %run script.py	Run a Python script inside IPython
+    - %prun statement	Execute statement with cProfile and report the profiler output
+    - %time statement	Report the execution time of a single statement
+    - %timeit statement	Run a statement multiple times to compute an ensemble average execution time; useful for timing code with very short execution time
+  - %who, %who_ls, %whos	Display variables defined in interactive namespace, with varying levels of information/verbosity
+  - %xdel variable	Delete a variable and attempt to clear any references to the object in the IPython internals
   - %matplotlib configures its integration with the IPython shell or Jupyter notebook
     - in IPython shell, running this sets up the integration so you can create multiple plot windows without interfering with console session
     - in Jupyter it's %matplotlib inline
@@ -177,7 +177,7 @@
 
         In [18]: b = 2
 
-        # String formatting, to be visited later
+        String formatting, to be visited later
         In [19]: print('a is {0}, b is {1}'.format(type(a), type(b)))
         a is <class 'float'>, b is <class 'int'>
 
