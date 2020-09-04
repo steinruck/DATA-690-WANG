@@ -529,8 +529,144 @@ Tuples
   (out) ('foo', [1, 2, 3], True)
 - can concantenate tuples using the + operator
   (3, None, 'foo') + (6, 0) + ('bar',)
-- 
-    
+- multiplying tuple by an integer concantinates that many copies of the tuple
+  ('foo', 'bar') * 4
+  (output) ('foo', 'bar', 'foo', 'bar', 'foo', 'bar', 'foo', 'bar')
+  - the objects themselves are not copied, only the references to them
+- if you try to assign to a tuple-like expression of variables, Python tries to uppack the value on the right of the equals
+  tup = (4, 5, 6)
+  a, b, c = tup
+  b 
+  (output) 5
+- even nested tuples can be unpacked
+  tup = 4, 5, (6, 7)
+  a, b, (d, d) = tup
+  d
+  (out) 7
+- swap variable names
+  a, b, = 1, 2
+  a
+  (out) 1
+  b
+  (out) 2
+  b, a = a, b
+  a 
+  (out) 2
+  b 
+  (out) 1
+- common use of variable unpacking is iterating over sequences of tuples or lists
+  seq = [(1, 2, 3), )4, 5, 6), (7, 8, 9)]
+  for a, b, c in seq:
+    print('a={0}, b={1}, c={2}'.format(a, b, c))
+- another common use is returning multiple values from a function
+- \*rest used to pluck elements from the beginning of a tuple
+  values = 1, 2, 3, 4, 5
+  a, b, \*rest = values
+  a, b
+  (out) (1, 2)
+  rest
+  (out) [3, 4, 5]
+- rest is nothing special. Just references things you want to discard. Common convention is to use \*_ for unwanted variables
+
+Tuple methods
+- not many methods since contents of a tuple can't be modified
+- count is useful. Counts the number of occurances of a value
+  a = (1, 2, 2, 2, 3, 4, 2)
+  a.count(2)
+  (out) 4
+  
+List
+- variable legth and contents can be modified. Define them with [] or *list* type function
+  a_list = [2, 3, 7, None]
+  tup = ('foo', 'bar', 'baz')
+  b_list = list(tup)
+  b_list
+  b_list[1] = 'peekaboo'
+ - symantically similar to tuples and can be used interchangably in many functions
+ - *list* function common in data processing to materialize an iterator or generator expression
+  gen = range(10)
+  gen
+  list(gen)
+  
+ Adding and removing elements
+ - append method
+  b_list.append('dwarf')
+  b_list
+ - insert at specific location
+  b_list.insert(1, 'red')
+  b_list
+- pop to remove
+  b_list.pop(2)
+  b_list
+- remove locates first matching value and removes
+    b_list.append('foo')
+    b_list
+    b_list.remove('foo')
+    b_list
+ - check if list contains a value using *in*
+  'dwarf' in b_list
+- *not* to negate *in*
+  'dwarf' not in b_list
+
+Concantenating and combining lists
+- similar to tuples
+- append multiple elements to list using *extend*
+  x = [4, None, 'foo']
+  x.extend([7, 8, (2, 3)])
+  x
+- better to use extend than concantenating b/c less operationally expensive
+  everything = []
+  for chunk in list_of_lists
+    everything.extend(chunk)
+  
+Sorting
+- sort list without creating new object 
+  a = [7, 2, 5, 1, 3]
+  a.sort()
+  a
+- secondary sort key (value used to sort)
+  b = ['saw', 'small', 'He', 'foxes', 'six']
+  b.sort(key=len)
+  b
+  
+  Binary search and maintaining a sorted list
+  - *bisect* implements binary search and insertion into a sorted list
+  - bisect.bisect finds location where elements should be inserted to keep it sorted
+  - bisect.insort inserts element into that location
+    import bisect
+    c = [1, 2, 2, 2, 3, 4, 7]
+    bisect.bisect(c, 2)
+    bisect.bisect(c, 5)
+    bisect.insort(c, 6)
+    c
+  - doesn't check if sorted first. Can use on unsorted list but might have incorrect results
+  
+  Slicing
+  - start:stop passed to the indexing operator []
+    seq = 7, 2, 3, 7, 5, 6, 0, 1]
+    seq[1:5]
+  - slices can be assigned to with a sequence
+    seq[3:4] = [6:3]
+    seq
+  - start or stop could be omitted and it defaults to either beginning or end respectively
+    seq[:5[
+    seq[3:]
+  - negative indices slice from end
+    seq[-4:]
+  - step can be used after a second colon 
+    seq[::2]
+  - using -1 as the step reverses the list or tuple
+  
+  Built-In Sequence Functions
+  
+  enumerate
+
+
+
+
+your_name = input("What is your name?")
+print("Hello ", your_name)
+
 
 
   
