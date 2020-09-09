@@ -669,13 +669,148 @@ print("Hello ", your_name)
 
 
 
+# CH 4 NumPy Basics: Arrays and vectorized computation
+
+For most data analysis applications, the main areas of functionality I’ll focus on are:
+
+- Fast vectorized array operations for data munging and cleaning, subsetting and filtering, transformation, and any other kinds of computations
+- Common array algorithms like sorting, unique, and set operations
+- Efficient descriptive statistics and aggregating/summarizing data
+- Data alignment and relational data manipulations for merging and joining together heterogeneous datasets
+- Expressing conditional logic as array expressions instead of loops with if-elif-else branches
+- Group-wise data manipulations (aggregation, transformation, function application)
+- designed for efficiency on large data arrays
+  - internally stores data in a contiguous block of memory
+  - use less memory than built in python sequences
+- numpy ops perform complex computations on entire arrays without the need for Python for loops
+
+Numpy ndarray: A multidimensional array object
+- ndarray is a fast, flexible contaner for large datasets
+- allow you to perform math ops on whole blocks of data using similar sintax to the equivalent operations between scalar elements
+
+  In [12]: import numpy as np
+  Generate some random data
+  In [13]: data = np.random.randn(2, 3)
+  In [14]: data
+  Out[14]: 
+  array([[-0.2047,  0.4789, -0.5194],
+       [-0.5557,  1.9658,  1.3934]])
+  In [15]: data * 10
+  In [16]: data + data
   
-
+- ndarray is a generic multidimensional container for homogeneous data
+  - all of the elements must be the same type
+- every array has a shape, a tuple indicating the size of each dimension, and a dtype, an object describing the data type of the array
+  data.dtype
+  data.shape
+- easiest way to create an array is the array function
+  - accepts any sequence like object and produces a new NumPy array containing the passed data
+  In [19]: data1 = [6, 7.5, 8, 0, 1]
+  In [20]: arr1 = np.array(data1)
+  In [21]: arr1
+  Out[21]: array([6. , 7.5, 8. , 0. , 1. ])
+- nested sequences will be converted into a multidimensional array
+  In [22]: data2 = [[1, 2, 3, 4], [5, 6, 7, 8]]
+  In [23]: arr2 = np.array(data2)
+  In [24]: arr2
+  Out[24]: 
+  array([[1, 2, 3, 4],
+         [5, 6, 7, 8]])
+  - data 2 was a list of lists, the Numpy array arr2 has 2 dimensions with shape inferred from the data
+  - can confirm by inspecting the ndim and shape attributes
+    arr2.ndim
+    arr2.shape
+- np.array tries to infer a good data type for the array it creates. Datatype is stored in the dtype metadata object
+  In [27]: arr1.dtype
+  Out[27]: dtype('float64')
+  In [28]: arr2.dtype
+  Out[28]: dtype('int64')
+- *zeros* and *ones* create arrays of 0s and 1s with a given length or shape
+- *empty* creates an array without initializing its values to any particular value
+- to create a higher dimensional array with these methods, pass a tuple for the shape
+  In [29]: np.zeros(10)
+  Out[29]: array([0., 0., 0., 0., 0., 0., 0., 0., 0., 0.])
+  In [30]: np.zeros((3, 6))
+  Out[30]: 
+  array([[0., 0., 0., 0., 0., 0.],
+         [0., 0., 0., 0., 0., 0.],
+         [0., 0., 0., 0., 0., 0.]])
+  In [31]: np.empty((2, 3, 2))
+  Out[31]: 
+  array([[[0., 0.],
+         [0., 0.],
+         [0., 0.]],
+        [[0., 0.],
+         [0., 0.],
+          [0., 0.]]])
+- np.empty might return uninitialized garbage values instead of 1s
+- *arrange* is an array-valued version of the built-in Python range function
+  np.arange(15)
+- data type if not specified will usually be float64
+- array creation functions
+  - array	Convert input data (list, tuple, array, or other sequence type) to an ndarray either by inferring a dtype or explicitly specifying a dtype; copies the input data by default
+  - asarray	Convert input to ndarray, but do not copy if the input is already an ndarray
+  - arange	Like the built-in range but returns an ndarray instead of a list
+  - ones, ones_like	Produce an array of all 1s with the given shape and dtype; ones_like takes another array and produces a ones array of the same shape and dtype
+  - zeros, zeros_like	Like ones and ones_like but producing arrays of 0s instead
+  - empty, empty_like	Create new arrays by allocating new memory, but do not populate with any values like ones and zeros
+  - full, full_like	Produce an array of the given shape and dtype with all values set to the indicated “fill value” full_like takes another array and produces a filled array of the same shape and dtype
+  - eye, identity	Create a square N × N identity matrix (1s on the diagonal and 0s elsewhere) 
   
+Data types for ndarrays
+- dtype is a special object containing metadata 
+  In [33]: arr1 = np.array([1, 2, 3], dtype=np.float64)
+  In [34]: arr2 = np.array([1, 2, 3], dtype=np.int32)
+  In [35]: arr1.dtype
+  Out[35]: dtype('float64')
+  In [36]: arr2.dtype
+  Out[36]: dtype('int32') 
+- dtypes are a source of Numpy's flexibility for interacting with data coming from other systems
+- in most cases they provide a mapping directly onto an underlying disk or memory representation
+- cast float to int dtype
+  In [41]: arr = np.array([3.7, -1.2, -2.6, 0.5, 12.9, 10.1])
+  In [42]: arr
+  Out[42]: array([ 3.7, -1.2, -2.6,  0.5, 12.9, 10.1])
+  In [43]: arr.astype(np.int32)
+  Out[43]: array([ 3, -1, -2,  0, 12, 10], dtype=int32)
+- astype - array of strings representing numbers converted to numeric
+  In [44]: numeric_strings = np.array(['1.25', '-9.6', '42'], dtype=np.string_)
+  In [45]: numeric_strings.astype(float)
+  Out[45]: array([ 1.25, -9.6 , 42.  ])
+- numpy.string_type may truncate input without warning b/c string data is fixed sized in NumPy. Use panda
 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
  
  
  
