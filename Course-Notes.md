@@ -660,9 +660,428 @@ Sorting
   Built-In Sequence Functions
   
   enumerate
+ - keep track of iterations
+   t = 0
+   for value in collection:
+   i += 1
+ - python has a built in version for this
+   for i, value in enumerate(collection:
+ - helpful patter that uses enumerate is computing a dict mapping the values of a sequence to their locations in the sequence
+   some_list = ['foo', 'bar', 'baz']
+   mapping = {}
+   for i, v in enumerate(some_list):
+    mapping[v] = i
+    mapping
 
+sorted
+- returns a new sorted list from the elements of any sequence
+  sorted([7, 1, 2, 6, 0, 3, 2])
+  sorted('horse race')
 
+zip
+- pairs up the elements of a number of lists, tuples, or other sequence to create a list of tuples
+  seq1 = ['foo', 'bar', 'baz']
+  seq2 = ['one', 'two', 'three']
+  zipped = zip(seq1, seq2)
+  list(zipped)
+- can take arbitrary number of sequences, and the number of elements it produces is determined by the shortest sequence
+  seq3 = [False, True]
+  list(zip(seq1, seq2, seq3))
+- common use os simultaneously iterating over multiple sequences, possibly combined with enumerate
+  for i, (a, b) in enumerate(zip(seq1, seq2)):
+    print('{0}: {1}, {2}'.format(i, a, b))
+- given a zipped sequence, zip can unzip. Convert a list of rows to a list of columns
+  pitchers = [('Nolan', 'Ryan'), {'Roger', 'Clemens'), ('Schilling', 'Curt')]
+  first_names, last_names = zip(*\pitchers)
+  first_names
+  last_names
+  
+reversed
+- iterates over sequence in reverse
+  list(reversed(range(10)))
+- is a generator so doesn't create reversed sequence until materialized
 
+dict
+- likely the most important built in data structure
+- flexibly sized collection of key-value pairs, where *key* and *value* are Python objects
+  empty_dict = {}
+  d1 = {'a' : 'some value', 'b' : [1, 2, 3, 4]}
+- can access, insert, or set elements using the same syntax as for accessing elements of a list or tuple
+  d1[7] = 'an integer'
+  d1
+  d1['b']
+- can check if a dict contains a key using the same syntax for checking whether a list or tuple contains a value
+  'b' in d1
+- delete with del keyword or the pop method
+  d1[5] = 'some value'
+  d1
+  d1['dummy'] = 'another value'
+  d1
+  del d1[5]
+  d1
+  ret = d1.pop('dummy')
+  ret
+  d1
+- gives iterators of the dict's keys and values respectively
+  list(d1.keys())
+- can merge one dict into another using update
+  d1.update({'b' : 'foo', 'c' : 12})
+  d1
+-changes dicts in place s oany existing keys in the data passed to update will have their old values discarded
+
+creating dicts from sequences
+-sometimes have two sequences you wan to pair up element-wise in a dict
+  mapping = {}
+  for key, value in zip(key_list, value_list):
+    mappying[key] = value
+  since a dict is a collection of 2 tuples, the dict accepts a list of 2 tuples
+    mapping = dict(zip(range(5), reversed(range(5))))
+    mapping
+    
+default values
+- common to have logic like this
+  if key in some_dict:
+    value = some_dict[key]
+  else:
+    value = default_value
+- dict methods*get* and *pop* can take a default value to be returned so that the above can be written as
+  value = some_dict.get(key, default_value)
+- *get* by default will return None if key not present, while *pop* will raise an exception
+- with setting values, a common case is for th evalues in a dict to be other collections, like list
+- categorize a list of words by their first letters as a dict of lists
+  words = ['apple', 'bat', 'bar', 'atom', 'book']
+  by_letter = {}
+  for word in words:
+    letter = word[]
+    if letter not in by_letter:
+      by_letter[letter] = [word]
+    else:
+      by_letter[letter].append(word)
+  by_letter
+- *setdefault* dict method is used for this purpose. The above loop can be
+  for word in words:
+    letter = word[0]
+    by_letter.setdefault(letter, []).append(word)
+- built in collections module has *defaultdict* which makes it even easier. TO create, pass a type or function for generating the default value for each slot in the dict:
+  from collections import defaultdict
+  by_letter = defaultdict(list)
+  for word in words:
+    by_letter[word[0]].append(word)
+    
+  valid dict key types
+  - values can generally be any python object
+  - keys have to be immutable objects, like scalar types (int, float, string) or tuples
+  - technical term is hashability
+  - use hash function to check 
+    hash('string')
+  - need to convert list to tuple if want to use as a key
+  
+  set
+  - unordered collection of unique elements
+  - like a dict with only keys and no values
+  - created with set function or set literal with curly braces
+    set([2, 2, 2, 1, 3, 3])
+    or
+    {2, 2, 2, 1, 3, 3}
+  - support mathematical set operations like union, intersection, differencce, and symmetric difference
+    a = {1, 2, 3, 4, 5}
+    b = {3, 4, 5, 6, 7, 8}
+  - the union of the 2 sets is the set of distinct ememnts in either set. Computed with the union method or the | binary operator
+    a.union(b)
+    a | b
+  - intersection contains the elements occurring in both sets
+    a.intersection(b)
+    a & b
+  - all logical set operations have in-place counterparts which enable you to replace the contents of the set ont he self with the result
+    c = a.copy()
+    c |= b
+    c
+    d = a.copy()
+    d &= b
+  - like dicts, set elements generally must be immutable. Need to convert to tuple
+    my_data = [1, 2, 3, 4]
+    my_set = {tuple(my_data)}
+    my_set
+  - can check if set is a subset or superset of another set
+    a_set = {1, 2, 3, 4, 5}
+    {1, 2, 3}.issubnet(a_set)
+    a_set.issuperset({1, 2, 3})
+  - sets are equal if their contents are equal
+    {1, 2, 3,} == {3, 2, 1}
+    
+list, set, and dict comprehensions
+- list comprehensions are one of the most loved python features. Allow you to concisely form new list by filtering elements of a collection, transforming the elements passing the filter in one concise expression
+  [expr for val in collection if condition]
+- equivalent to the for loop
+  result = []
+  for val in collection:
+    if condition:
+      result.append(expr)
+- filter condition can be omitted leaving only the expression. Given a list of strings, we could filter out strings with length 2 or less and convert them to uppercase
+  strings = ['a', 'as', 'bat', 'car', 'dove', 'python']
+  [x.upper() for x in strings if len(x) >2]
+- set and dict comprehensions are a natural extension, producing sets and dicts in an idiomatically similar way instead of lists
+  dict_comp = {key-expr : value-expr for valuue in collection if condition}
+- set comprehension looks like the equivalent list comprehension but with curlies
+  set_comp = {expr for value in collection if condition}
+- set and dict are mostly conveniences but can make code easier to write and read
+- set with jsut lengths of strings in collection
+  unique_lengths = {len(x) for x in strings}
+  unique_lengths
+- express mroe functionally with map function
+  set(map(len, strings))
+- create lookip map of strings to locations in list
+  loc_mapping = {val : index for index, val in enumerate(strings)}
+  
+Nested list comprehensions
+- organize by lanfuafe and make single list with all names wit 2 or more e's
+  result = [name for names in all_data for name in names
+            if name.count('e') >= 2]
+- the got parts of the list comprehension are arranged according to the order of nesting, and any filter condition is put at the end as before
+- "flatten" a list of tuples of integers into a simple lisst of integers
+  some_tuples = [(1, 2, 3), (4, 5, 6), (7, 8, 9)]
+  flattened = [x for tup in some_tuples for x in tup]
+- the order of th efor expressions would be the same if you wrote a nested for loop instead of list comprehension
+  flattened = []
+  for tup in some_tuples:
+    for x in tup:
+      flattened.appennd(x)
+- list comprehension inside a list comprehension
+  [[x for x in tup] for tup in some_tuples]
+  
+Functions
+- primary and most important method of code organization and reuse in python
+- if you anticipate the need to repeat the same or similar code, make a function
+- help make code more readable by giving a name to group of python statements
+- declared with the def keyword and returned with return keyword
+  def my_function(x, y, z=1.5):
+    if z >1:
+      return z * (x + y)
+    else:
+      return z / (x + y)
+- no issue with having multiple return statements. If no return, None is returned
+- each function can have positional and keyword arguments
+- keyword used to specify default values or optional arguments
+- x and y are positional arguments whil ez is a keyword argument. Function can be called in any of these ways:
+  my_function(5, 6, z=0.7)
+  my_function(3.14, 7, 3.5)
+  my_function(10, 20)
+- keyword arguments must follow the positional arguments but can specify keyword arguments in any order
+- possible to use keywords for passing positional arguments as well
+  my_function(x=5, y=6, z=7)
+  my_function(y=6, x=5, z=7)
+  
+Namespaces, scope, and local functions
+- global and local scopes (also refered to as a namespace)
+- variables inside function are local. Local namespace created when function is called and immediate populated by functions arguments. When finished, local namespace is destroyed
+  def func():
+    a = []
+    for i in range(5):
+      a.append(i)
+    - when func() is called, the empty list a is created, 5 elements are appended, and then a is destroyed when function exits
+  a = []
+   def func():
+    for i in range():
+      a.append(i)
+- assigning variables outside function's scope is possible but hey must be decared with global keyword
+  a = None
+  def bind_a_variable():
+    global a 
+    a = []
+  bind_a_variable()
+  print(a)
+- better to use classes instead of a lot of global variables
+
+Returning multiple values
+  def f():
+    a = 5
+    b = 6
+    c = 7
+    return a, b, c
+  a, b, c = f()
+- function is returning one object (a tuple) which is unpacked into the result variables. Could do this instead
+  return_value = f()
+- return_value would be a 3-tuple witht the three returned variables. Could also use a dict
+  def f():
+    a = 5
+    b = 6
+    c = 7
+    return {'a' : a, 'b' : b, 'c' : c}
+
+Functions are objects
+- suppose need to do data cleaning and apply a bunch of transformations to list of strings
+  In [171]: states = [' Alabama ', 'Georgia!', 'Georgia', 'georgia', 'FlOrIda',
+.....: 'south carolina##', 'West virginia?']
+- need to remove white space, punctuation symbols, standardize capitalization
+- can use built-in string methods with the re standard library module for regular expressions
+  import re
+  def clean_strings(strings):
+    result = []
+    for value in strings:
+      value = value.strip()
+      value = re.sub('[!#?]', '', value)
+      value = value.title()
+      result.append(value)
+    return result
+  clean_strings(states)
+- alternative approach is to make a list of operations you want to apply
+  def remove_punctuation(value):
+    return re.sub('[!#?]', '', value)
+  clean_ops = [str.strip, remove_punctuation, str.title]
+  def clean_strings(strings, ops)
+    result = []
+    for value in strings
+      for function in ops:
+        value = function(value)
+      result.append(value)
+    return result
+  clean_strings(states, clean_ops)
+- this is more functional and allows you to easily modify how the strings are transformed
+- can use functions as arguments to other functions
+  for x in map(remove_puntuation, states):
+    print(x)
+
+Anonymous (Lambda) Functions
+- writing functions consisting of a single statement where result is return value
+  def short_function(x):
+    return x * 2
+  equiv_anon = lambda x: x * 2
+- convenient in data analysis where data transformation functions will take functions as arguments
+- less typing and clearer to pass lambda instead of writing full funtion declaring or assigning lambda function to a local variable
+
+Currying: Partial Argument Application
+- currying means deriving new functions from existing ones by partial argument application
+  def add_numbers(x, y):
+    return x + y
+- derive new function of one variable, add_five that adds 5 to argument
+  add_five = lambda y: add_numbers(5, y)
+- second argument to add_numbers is said to be curried
+- built in functools module simplifies process
+  from functools import partial
+  add_five = partial(add_numbers, 5)
+  
+Generators 
+- iterator protocol iterates over sequences
+  some_dict = {'a': 1, 'b': 2, 'c': 3}
+  for key in some_dict:
+    print(key)
+- python interpreter first attempts to create iterator out of some_dict
+  dict_iterator = iter(some_dict)
+  dict_iterator
+- iterator is any object that will yield objects to the interpreter when used in a context like a for loop
+- most methods expecting a list or list-like object will also accept any iterable object
+  - min, max, and sum, and type constructors like list or tuple
+    list(dict_iterator)
+- generator is concise way to construct new iterable object
+- generators return a dequence of multiple results, pausing after each until next is requested
+  def squares(n=10):
+    print('generating squares from 1 to {0}'.format(n **2))
+    for i in range(1, n + 1):
+      yield i ** 2
+- when you call, no code is immediately executed:
+  gen = squares()
+  gen
+- not until you request elements from the generator
+  for x in gen:
+    print(x, end=' ')
+    
+Generator expressions
+- a more concise way to make generator is generator expressions
+  gen = (x ** 2 for x in range(100))
+  gen
+- equivalent of this:
+  def _make_gen():
+    for x in range(100):
+      yield x ** 2
+  gen = _make_gen()
+- generator expressions can be used instead of list comprehensions as function arguments
+  sum(x ** 2 for x in range(100))
+  dict((i, i **2) for i in range(5))
+  
+itertools module
+- collection of generators for common data algorithms
+- groupby takes any sequence and a function, grouping consecutive elements in the sequence by retun value of the function
+  import itertools
+  first_letter = lambda x: x[]
+  names = ['Allen', 'Adam', 'Wes', 'Will', 'Albert', 'Steven']
+  for letter, names in itertools,groupby(names, first_letter)"
+    print(letter, list(names)) 
+    - names is a generator
+   
+Errors and exception handling
+- some functions only work with certain input
+- ways to fail gracefully
+  def attempt_float(x):
+    try:
+      return float(x)
+    except:
+      return x
+- the code in except will only be executed if float(x) raises an exception
+  attempt_float('1.2345')
+  attempt_float('something')
+- might want to only supress ValueError, since TypeError might indicate a program bug)
+  def attempt_float(x):
+    try:
+      return float(x)
+    except ValueError:
+      return x
+- catch multiple exception types
+  def attempt_float(x):
+    try:
+      return float(x)
+    except (TypeError, ValueError):
+      return x
+- might not want to suppress an exception, but want some code to execute regardless
+  f = open(path, 'w')
+  try:
+    write_to_file(f)
+  finally:
+    f.close()
+- file handle f will always get closed
+- can have code that executes only if the try block succeeds using else
+  f = open(path, 'w')
+  try:
+    write_to_file(f)
+  except:
+    print('Failed')
+  else:
+    print('Succeeded')
+  finally:
+    f.close()
+    
+Exceptions in IPython
+- if an exception is raised while running script or executing any statement, IPython prints full call stack trace (gives context)
+
+Files and Operating System
+- to open file for reading or writing
+  path = 'examples/segismundo.txt'
+  f = open(path)
+- default opens in read only. Can then treat file handle like list and iterate over lines
+  for line in f:
+    pass
+- lines come out of file with EOL marker so use code to clean
+  lines = [x.rstrip() for x in open(path)]
+  lines
+- when use open to create file objects, must explicitly close when done
+  f.close()
+- use with statement to clean open files
+  with open(path) as f:
+    lines = [x.rstrip() for x in f]
+- most common methods for readable files
+  read, seek, tell
+    - read returns certain number of characters from file
+    - tell gives you current position
+    - seek changes file position to indicated byte
+    f = open(path)
+    f.read(10)
+    f.tell()
+    f.seek(3)
+- to write to a file
+  with open('tmp.txt', 'w') as handle:
+    handle.writelines(x for x in open(path) if len(x) >1)
+  with open('tmp.txt') as f:
+    lines = f.readlines()
+  lines
 
 your_name = input("What is your name?")
 print("Hello ", your_name)
