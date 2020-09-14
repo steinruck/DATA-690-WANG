@@ -1664,6 +1664,394 @@ Array-Oriented Programming with Arrays
 - NumPy arrays enable you to express many kinds of data processing tasks as a concise array instead of loops
 - referred to as vectorization
 - will often be 1 or 2 orders of magnitude faster 
+- np.meshgrid function takes 2 1D arrays and produces two 2D matrices correspinding to all pairs of (x, y)
+  In [155]: points = np.arange(-5, 5, 0.01) # 1000 equally spaced points
+  In [156]: xs, ys = np.meshgrid(points, points)
+  In [157]: ys
+  Out[157]: 
+  array([[-5.  , -5.  , -5.  , ..., -5.  , -5.  , -5.  ],
+        [-4.99, -4.99, -4.99, ..., -4.99, -4.99, -4.99],
+        [-4.98, -4.98, -4.98, ..., -4.98, -4.98, -4.98],
+        ...,
+        [ 4.97,  4.97,  4.97, ...,  4.97,  4.97,  4.97],
+        [ 4.98,  4.98,  4.98, ...,  4.98,  4.98,  4.98],
+        [ 4.99,  4.99,  4.99, ...,  4.99,  4.99,  4.99]])
+- evaluating the function is a matter of writing the same expression you would with 2 points
+  In [158]: z = np.sqrt(xs ** 2 + ys ** 2)
+  In [159]: z
+  Out[159]: 
+  array([[7.0711, 7.064 , 7.0569, ..., 7.0499, 7.0569, 7.064 ],
+        [7.064 , 7.0569, 7.0499, ..., 7.0428, 7.0499, 7.0569],
+        [7.0569, 7.0499, 7.0428, ..., 7.0357, 7.0428, 7.0499],
+        ...,
+        [7.0499, 7.0428, 7.0357, ..., 7.0286, 7.0357, 7.0428],
+        [7.0569, 7.0499, 7.0428, ..., 7.0357, 7.0428, 7.0499],
+        [7.064 , 7.0569, 7.0499, ..., 7.0428, 7.0499, 7.0569]])
+- use matplotlib to create visualizations of this two-dimensional array
+  In [160]: import matplotlib.pyplot as plt
+  In [161]: plt.imshow(z, cmap=plt.cm.gray); plt.colorbar()
+  Out[161]: <matplotlib.colorbar.Colorbar at 0x7f8520cd1b38>
+  In [162]: plt.title("Image plot of $\sqrt{x^2 + y^2}$ for a grid of values")
+  Out[162]: Text(0.5,1,'Image plot of $\\sqrt{x^2 + y^2}$ for a grid of values')
+- omshow creates an image plot from a two dimensional array of function values
+
+Expressing conditional logic as array operations
+- numpy .where function is a vectorized version of if/else statement
+- have boolean array and two arrays of values. Want to take value from xarr whenever the corresponding value in cond is True, and otherwise take the value from yarr
+  In [165]: xarr = np.array([1.1, 1.2, 1.3, 1.4, 1.5])
+  In [166]: yarr = np.array([2.1, 2.2, 2.3, 2.4, 2.5])
+  In [167]: cond = np.array([True, False, True, True, False])
+  In [168]: result = [(x if c else y)
+    .....:           for x, y, c in zip(xarr, yarr, cond)]
+  In [169]: result
+  Out[169]: [1.1, 2.2, 1.3, 1.4, 2.5]
+  - this is not fast for large arrays and will not work for multidimensional arrays
+- .where version 
+  In [168]: result = [(x if c else y)
+    .....:           for x, y, c in zip(xarr, yarr, cond)]
+  In [169]: result
+  Out[169]: [1.1, 2.2, 1.3, 1.4, 2.5]
+- typical use of where is to produce a new array of values based on another aray
+- matrix of rand data and you want to replace all positive values with 2 and all negative with -2
+  In [172]: arr = np.random.randn(4, 4)
+  In [173]: arr
+  Out[173]: 
+  array([[-0.5031, -0.6223, -0.9212, -0.7262],
+        [ 0.2229,  0.0513, -1.1577,  0.8167],
+        [ 0.4336,  1.0107,  1.8249, -0.9975],
+        [ 0.8506, -0.1316,  0.9124,  0.1882]])
+  In [174]: arr > 0
+  Out[174]: 
+  array([[False, False, False, False],
+        [ True,  True, False,  True],
+        [ True,  True,  True, False],
+        [ True, False,  True,  True]])
+  In [175]: np.where(arr > 0, 2, -2)
+  Out[175]: 
+  array([[-2, -2, -2, -2],
+        [ 2,  2, -2,  2],
+        [ 2,  2,  2, -2],
+        [ 2, -2,  2,  2]])
+- can combine scalars and arrays with np.where
+- replace all positive values in arr with the constant 2
+  In [176]: np.where(arr > 0, 2, arr) # set only positive values to 2
+  Out[176]: 
+  array([[-0.5031, -0.6223, -0.9212, -0.7262],
+        [ 2.    ,  2.    , -1.1577,  2.    ],
+        [ 2.    ,  2.    ,  2.    , -0.9975],
+        [ 2.    , -0.1316,  2.    ,  2.    ]])
+
+Mathematical and statistical methods
+- can use aggregations like sum, mean, and std by calling th earray instance method or using the top-level NumPy function
+  In [177]: arr = np.random.randn(5, 4)
+  In [178]: arr
+  Out[178]: 
+  array([[ 2.1695, -0.1149,  2.0037,  0.0296],
+        [ 0.7953,  0.1181, -0.7485,  0.585 ],
+        [ 0.1527, -1.5657, -0.5625, -0.0327],
+        [-0.929 , -0.4826, -0.0363,  1.0954],
+        [ 0.9809, -0.5895,  1.5817, -0.5287]])
+  In [179]: arr.mean()
+  Out[179]: 0.19607051119998253
+  In [180]: np.mean(arr)
+  Out[180]: 0.19607051119998253
+  In [181]: arr.sum()
+  Out[181]: 3.9214102239996507
+- functions like mean and sum take an optional axis argument that computes the statistic over the given axis, resulting in an array with one fewer dimension
+  In [182]: arr.mean(axis=1)
+  Out[182]: array([ 1.022 ,  0.1875, -0.502 , -0.0881,  0.3611])
+  In [183]: arr.sum(axis=0)
+  Out[183]: array([ 3.1693, -2.6345,  2.2381,  1.1486])
+  - arr.mean(1) means "compute mean across the columns" where arr.sum(o) means "compute the sum down the rows"
+- cumsum and cumprod do not aggregate (produce array of intermediate results
+  In [184]: arr = np.array([0, 1, 2, 3, 4, 5, 6, 7])
+  In [185]: arr.cumsum()
+  Out[185]: array([ 0,  1,  3,  6, 10, 15, 21, 28])
+- in multidemensional arrays, accumulation functions like cumsum return an array of the same size but with partial aggregates computed along the indicated axis according to each lower dimensional slice
+  In [186]: arr = np.array([[0, 1, 2], [3, 4, 5], [6, 7, 8]])
+  In [187]: arr
+  Out[187]: 
+  array([[0, 1, 2],
+        [3, 4, 5],
+        [6, 7, 8]])
+  In [188]: arr.cumsum(axis=0)
+  Out[188]: 
+  array([[ 0,  1,  2],
+        [ 3,  5,  7],
+        [ 9, 12, 15]])
+  In [189]: arr.cumprod(axis=1)
+  Out[189]: 
+  array([[  0,   0,   0],
+        [  3,  12,  60],
+        [  6,  42, 336]])
+- basic array statistical methods
+  - sum	Sum of all the elements in the array or along an axis; zero-length arrays have sum 0
+  - mean	Arithmetic mean; zero-length arrays have NaN mean
+  - std, var	Standard deviation and variance, respectively, with optional degrees of freedom adjustment (default denominator n)
+  - min, max	Minimum and maximum
+  - argmin, argmax	Indices of minimum and maximum elements, respectively
+  - cumsum	Cumulative sum of elements starting from 0
+  - cumprod	Cumulative product of elements starting from 1
+
+Methods for Boolean Arrays
+- sum is often used to count true values in a boolean array 
+  In [190]: arr = np.random.randn(100)
+  In [191]: (arr > 0).sum() # Number of positive values
+  Out[191]: 42
+- two additional methods, any and all, useful especially boolean arrays
+- any tests whether one or more values in an array is true, whole all checks if every value is true
+  In [192]: bools = np.array([False, False, True, False])
+  In [193]: bools.any()
+  Out[193]: True
+  In [194]: bools.all()
+  Out[194]: False
+
+Sorting
+- sort in place witht he sort method 
+  In [195]: arr = np.random.randn(6)
+  In [196]: arr
+  Out[196]: array([ 0.6095, -0.4938,  1.24  , -0.1357,  1.43  , -0.8469])
+  In [197]: arr.sort()
+  In [198]: arr
+  Out[198]: array([-0.8469, -0.4938, -0.1357,  0.6095,  1.24  ,  1.43  ])
+- can sort each one-dimensional section of values in a multidimensional array in place along an axis by passing the axis number to sort
+  In [195]: arr = np.random.randn(6)
+  In [196]: arr
+  Out[196]: array([ 0.6095, -0.4938,  1.24  , -0.1357,  1.43  , -0.8469])
+  In [197]: arr.sort()
+  In [198]: arr
+  Out[198]: array([-0.8469, -0.4938, -0.1357,  0.6095,  1.24  ,  1.43  ])
+- the top-level method np.sort retuns a sorted cioy if an array instead of modifying the array in place. Can sort and select th evalue at a particular rank
+  In [203]: large_arr = np.random.randn(1000)
+  In [204]: large_arr.sort()
+  In [205]: large_arr[int(0.05 * len(large_arr))] # 5% quantile
+  Out[205]: -1.5311513550102103
+
+Unique and other set logic
+- basic set operations for one-dimensional ndarrays
+- np.unique which returns the sorted unique values in an array
+  In [206]: names = np.array(['Bob', 'Joe', 'Will', 'Bob', 'Will', 'Joe', 'Joe'])
+  In [207]: np.unique(names)
+  Out[207]: array(['Bob', 'Joe', 'Will'], dtype='<U4')
+  In [208]: ints = np.array([3, 3, 3, 2, 2, 1, 1, 4, 4])
+  In [209]: np.unique(ints)
+  Out[209]: array([1, 2, 3, 4])
+- np.in1d tests membershjip of values in one array to another, returning a boolean array 
+  In [211]: values = np.array([6, 0, 0, 3, 2, 5, 6])
+  In [212]: np.in1d(values, [2, 3, 6])
+  Out[212]: array([ True, False, False,  True,  True, False,  True])
+- Array set operations
+  - unique(x)	Compute the sorted, unique elements in x
+  - intersect1d(x, y)	Compute the sorted, common elements in x and y
+  - union1d(x, y)	Compute the sorted union of elements
+  - in1d(x, y)	Compute a boolean array indicating whether each element of x is contained in y
+  - setdiff1d(x, y)	Set difference, elements in x that are not in y
+  - setxor1d(x, y)	Set symmetric differences; elements that are in either of the arrays, but not both
+  
+File Input and Output with Arrays
+- save and load data to and from desk in text or binary format
+- np.save and np.load 
+- arrays are saved by default in an uncompressed raw binary format with the file extension.npy
+  In [213]: arr = np.arange(10)
+  In [214]: np.save('some_array', arr)
+- if file path does not already end in .npy, the extension will be appended. Array on disk can then be loaded with np.load
+  In [215]: np.load('some_array.npy')
+  Out[215]: array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
+- save multiple arrays arrays in an uncompressed archive using np.savez and passing the arrays as keyword arguments
+  In [216]: np.savez('array_archive.npz', a=arr, b=arr)
+- when loading an .npz file, you get back a dickt-like object that loads the individual arrays lazily 
+  In [217]: arch = np.load('array_archive.npz')
+  In [218]: arch['b']
+  Out[218]: array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
+- if your data compresses well, you may wish to use numpy.savez_compressed instead
+  In [219]: np.savez_compressed('arrays_compressed.npz', a=arr, b=arr)
+
+Linear Algebra
+- multiplying two two dimesional arrays with * is an element-wise product instead of a matrix dot product
+- there is a function dot, bot an array method and a function for matrix multiplication
+  In [223]: x = np.array([[1., 2., 3.], [4., 5., 6.]])
+  In [224]: y = np.array([[6., 23.], [-1, 7], [8, 9]])
+  In [225]: x
+  Out[225]: 
+  array([[1., 2., 3.],
+        [4., 5., 6.]])
+  In [226]: y
+  Out[226]: 
+  array([[ 6., 23.],
+        [-1.,  7.],
+        [ 8.,  9.]])
+  In [227]: x.dot(y)
+  Out[227]: 
+  array([[ 28.,  64.],
+        [ 67., 181.]])
+-x.dot(y) is equivalent to np.dot(x, y)
+  In [228]: np.dot(x, y)
+  Out[228]: 
+  array([[ 28.,  64.],
+        [ 67., 181.]])
+- a matrix product between a two dimensional array and a suitable sized one-timensional array results in a one dimensional array
+  In [229]: np.dot(x, np.ones(3))
+  Out[229]: array([ 6., 15.])
+- the @ also works as an infix operator that performs matrix multiplication
+  In [230]: x @ np.ones(3)
+  Out[230]: array([ 6., 15.])
+- numpy.linalg has standard set of matrix decompositions and things like inverse and determinant
+- implemented under the hood
+  In [231]: from numpy.linalg import inv, qr
+  In [232]: X = np.random.randn(5, 5)
+  In [233]: mat = X.T.dot(X)
+  In [234]: inv(mat)
+  Out[234]: 
+  array([[  933.1189,   871.8258, -1417.6902, -1460.4005,  1782.1391],
+        [  871.8258,   815.3929, -1325.9965, -1365.9242,  1666.9347],
+        [-1417.6902, -1325.9965,  2158.4424,  2222.0191, -2711.6822],
+        [-1460.4005, -1365.9242,  2222.0191,  2289.0575, -2793.422 ],
+        [ 1782.1391,  1666.9347, -2711.6822, -2793.422 ,  3409.5128]])
+  In [235]: mat.dot(inv(mat))
+  Out[235]: 
+  array([[ 1.,  0.,  0.,  0.,  0.],
+        [ 0.,  1., -0., -0., -0.],
+        [-0., -0.,  1.,  0., -0.],
+        [ 0.,  0.,  0.,  1.,  0.],
+        [ 0.,  0., -0., -0.,  1.]])
+  In [236]: q, r = qr(mat)
+  In [237]: r
+  Out[237]: 
+  array([[-1.6914,  4.38  ,  0.1757,  0.4075, -0.7838],
+        [ 0.    , -2.6436,  0.1939, -3.072 , -1.0702],
+        [ 0.    ,  0.    , -0.8138,  1.5414,  0.6155],
+        [ 0.    ,  0.    ,  0.    , -2.6445, -2.1669],
+        [ 0.    ,  0.    ,  0.    ,  0.    ,  0.0002]])
+- the expression X.T.dot(X) computes the dot product of X with its transpose X.T
+- common linear algebra functions
+  - diag	Return the diagonal (or off-diagonal) elements of a square matrix as a 1D array, or convert a 1D array into a square    matrix with zeros on the off-diagonal
+  - dot	Matrix multiplication
+  - trace	Compute the sum of the diagonal elements
+  - det	Compute the matrix determinant
+  - eig	Compute the eigenvalues and eigenvectors of a square matrix
+  - inv	Compute the inverse of a square matrix
+  - pinv	Compute the Moore-Penrose pseudo-inverse of a matrix
+  - qr	Compute the QR decomposition
+  - svd	Compute the singular value decomposition (SVD)
+  - solve	Solve the linear system Ax = b for x, where A is a square matrix
+  - lstsq	Compute the least-squares solution to Ax = b
+
+Pseudorandom Number Generation
+- numpy.random mod supplements built in random with functions to generate whol arrays of sample values from many kinds of probability distributions
+- 4x4 array of samples from the standard normal distribution using normal
+  In [238]: samples = np.random.normal(size=(4, 4))
+  In [239]: samples
+  Out[239]: 
+  array([[ 0.5732,  0.1933,  0.4429,  1.2796],
+        [ 0.575 ,  0.4339, -0.7658, -1.237 ],
+        [-0.5367,  1.8545, -0.92  , -0.1082],
+        [ 0.1525,  0.9435, -1.0953, -0.144 ]])
+- built in only sample sone value at a time
+- numpy is faster
+- called pseudorandom numbers because generated by algorithm with deterministic behavior based ont he seed of the generator
+- can change the seed with np.random.seed(1234)
+- data gen functions in numpy.random use a global random seed. To avoid global state, use numpy.random.RandomState to creat random generator isolated from others
+  In [245]: rng = np.random.RandomState(1234)
+  In [246]: rng.randn(10)
+  Out[246]: 
+  array([ 0.4714, -1.191 ,  1.4327, -0.3127, -0.7206,  0.8872,  0.8596,
+        -0.6365,  0.0157, -2.2427])
+- some functions from mumpy.random
+  - seed	Seed the random number generator
+  - permutation	Return a random permutation of a sequence, or return a permuted range
+  - shuffle	Randomly permute a sequence in-place
+  - rand	Draw samples from a uniform distribution
+  - randint	Draw random integers from a given low-to-high range
+  - randn	Draw samples from a normal distribution with mean 0 and standard deviation 1 (MATLAB-like interface)
+  - binomial	Draw samples from a binomial distribution
+  - normal	Draw samples from a normal (Gaussian) distribution
+  - beta	Draw samples from a beta distribution
+  - chisquare	Draw samples from a chi-square distribution
+  - gamma	Draw samples from a gamma distribution
+  - uniform	Draw samples from a uniform [0, 1) distribution
+
+Example: Random Walks
+- simulation of random walks provides illustrative application of utilizing array operations
+- random walk starting at 0 with steps of 1 and -1 occuring with equal probablility
+  - pure python way
+    In [247]: import random
+      .....: position = 0
+      .....: walk = [position]
+      .....: steps = 1000
+      .....: for i in range(steps):
+      .....:     step = 1 if random.randint(0, 1) else -1
+      .....:     position += step
+      .....:     walk.append(position)
+      .....:
+   - walk is the cumulative sum of the random steps and could be evaluated as an array expression
+  - ise np.random mod to draw 1000 coin flips at once, set these to 1 and -1 an dcompute cumsum
+    In [251]: nsteps = 1000
+    In [252]: draws = np.random.randint(0, 2, size=nsteps
+    In [253]: steps = np.where(draws > 0, 1, -1)
+    In [254]: walk = steps.cumsum()
+- can extract stats like min and max value along the walk's trajectory
+  In [255]: walk.min()
+  Out[255]: -3
+  In [256]: walk.max()
+  Out[256]: 31
+- mor ecomplicated stat is first crossing time, the step at which the rand walk reaches a certain value
+- might want to know how long it took the rand wal kto get at least 10 steps from the origin in eithr direction
+- np.abs(walk) >= 10 gives boolean array indicating where the walk has reached or exceeded 10, but we want the index of th efirst 10 or -10
+- can compute using argmax, which returns the first index of the maximum value in the boolean array (True)
+    In [257]: (np.abs(walk) >= 10).argmax()
+    Out[257]: 37
+  - argmax always makes full scan of th earray
+
+Simulating many random walks at once
+- if goal is to simulate many wlaks, can generate with minor modifications
+- if passed a 2-tuple, numpy.random functions will generate a 2 dimensional array of draws, and we can compute cumsum across the rows 
+  n [258]: nwalks = 5000
+  In [259]: nsteps = 1000
+  In [260]: draws = np.random.randint(0, 2, size=(nwalks, nsteps)) # 0 or 1
+  In [261]: steps = np.where(draws > 0, 1, -1)
+  In [262]: walks = steps.cumsum(1)
+  In [263]: walks
+  Out[263]: 
+  array([[  1,   0,   1, ...,   8,   7,   8],
+        [  1,   0,  -1, ...,  34,  33,  32],
+        [  1,   0,  -1, ...,   4,   5,   4],
+        ...,
+        [  1,   2,   1, ...,  24,  25,  26],
+        [  1,   2,   3, ...,  14,  13,  14],
+        [ -1,  -2,  -3, ..., -24, -23, -22]])
+- now can compute max and min values obtained over all the walks 
+  In [264]: walks.max()
+  Out[264]: 138
+  In [265]: walks.min()
+  Out[265]: -133
+- compute minimum crossing time to 30 or -30. Tricky because not all 5000 of them reach 30. Can check using the any method
+  In [266]: hits30 = (np.abs(walks) >= 30).any(1)
+  In [267]: hits30
+  Out[267]: array([False,  True, False, ..., False,  True, False])
+  In [268]: hits30.sum() # Number that hit 30 or -30
+  Out[268]: 3410
+- can use this boolean array to select out the rows of walks that actually cross the absolute 30 level and call argmax across axis 1 to get the crossing times
+  In [269]: crossing_times = (np.abs(walks[hits30]) >= 30).argmax(1)
+  In [270]: crossing_times
+  Out[270]: array([735, 409, 253, ..., 327, 453, 447])
+- compute average minimum crossing time
+  In [271]: crossing_times.mean()
+  Out[271]: 498.8897360703812
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
