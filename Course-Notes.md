@@ -2040,16 +2040,325 @@ Simulating many random walks at once
 
 
 
+# Chapter 5: Getting Started with pandas
+- pandas contains data structures and manipulation tools for data cleansinng and analysis
+- used for tabular or heterogeneous data
+
+  import pandas as pd
+  from pandas import Series, DataFrame
+  
+- series is a one-dimensional array-like object containing a sequence of values and an associated array of data labels called an index
+  obj = pd.Series([4, 7, -5, 3])
+- string representation of a Series displayed interactively shows the index on the left and the values on the right
+- if you don't specify and index, default is 0 through N - 1 where N is the length of data
+  obj.values
+  obj.index (like range)
+- can create Series with an index identifying each data point with label
+  obj2 = pd.Series([4, 7, -5, 3], index=['d', 'b', 'a', 'c'])
+- can use labels in the index when selecting single values or a set of values
+  obj2['a']
+  obj2['d'] = 6
+  obj2[['c', 'a', 'd']]
+- here ['c', 'a', 'd'] is interpreted as a lsit of indices even though it contains strings instead of integers
+- using NumPy operations will preserve the index-value link
+  obj2[obj2 > 0]
+  obj2 * 2
+  np.exp(obj2)
+- Series is a fixed-length, ordered dict that maps index values to data values
+  'b' in obj2
+  'e' in obj2
+- can create a Series using a dict by passing it 
+    sdata = {'Ohio': 35000, 'Texas': 71000, 'Oregon: 16000, 'Utah': 5000}
+    obj3 = pd.Series(sdata)
+- when passing a dict, the index is the resulting Series will have the dicts keys in sorted order. Can override by passing keys in the order you want
+  states = ['California', 'Ohio', 'Oregon', 'Texas']
+  obj4 = pd.Series(sdata, index=states)
+- California has NaN because it does not exist
+  pd.isnull(obj4)
+- used to detect missing data
+- can also use
+  obj4.isnull()
+- both the Series object and index have a *name* attribute 
+  obj4.name = 'population'
+  onj4.index.name = 'state'
+- a series' index can be altered in-place by assignment
+  obj.index = ['Bob', 'Steve', 'Jeff', 'Ryan']
+  
+- DataFrame represents a rectangular table of data and contains an ordered collection of columns, each of which can be a different value type
+- has both a row and column index - like a dict of Series all sharing the same index
+- data is stored as one or more two-dimensional arrays
+- create a DF from a dict of equal length dicts or NumPy arrays
+  data = {'state': ['Ohio', 'Ohio', 'Ohio', 'Nevada', 'Nevada', 'Nevada'],
+  'year': [2000, 2001, 2002, 2001, 2002, 2003],
+  'pop': [1.5, 1.7, 3.6, 2.4, 2.9, 3.2]}
+  frame = pd.DataFrame(data)
+- the resulting DF has index assigned automatically and columns in sorted order 
+- head method selects only first 5 rows
+  frame.head()
+- can specify a sequence of columns to be displayed in that order
+  pd.DataFrame(data, columns=['year', 'state', 'pop'])
+- if you pass a column that isn't in the dict, appears with missing values
+  frame2 = pd.DataFrame(data, columns=['year', 'state', 'pop', 'debt'], index = ['one', 'two', 'three', 'four', 'five', 'six'])
+  frame2.columns
+- a column can be retrieved as a series either by dict-like notation or by attribute
+  frame2['state']
+  frame2.year
+- rows can be retieved by position or name with the special loc attribute
+  frame2.loc['three']
+- columns can be modified by assignment using a scalar value or an array of values
+  frame2['debt'] = 16.5
+  frame2['debt'] = np.arrange(6.)
+- when assigning lists or arrays to a column, the value's length must mach the length of the DF. If you assign a Series, its labels will be realigned exactly to the DF's index, inserting missing values in any holes
+  val = pd.Series([-1.2, -1.5, -1.7], index=['two', 'four', 'five'])
+  frame2['debt'] = val
+- assigning column that doesn't exist will create a new column. The del keyword deletes columns as with a dict
+  frame2['estern'] = frame2.state == 'Ohio'
+  frame2
+  del frame2['eastern']
+  frame2.columns
+- nested dicts are common
+  pop = {'Nevada': {2001: 2.4, 2002: 2.9},
+  ....: 'Ohio': {2000: 1.5, 2001: 1.7, 2002: 3.6}}
+- if nested dict is passed to the DF, pandas will interpret outer dict keys as columns and inner keys as row indices
+  frame3 = pd.DataFrame(pop)
+- can transpose the DF (swap rows and columns) with similar to NumPy
+  frame3.T
+- keys in the inner dicts are combined and sorted to form the index in the result. This isn't true if an explicit index is specified
+  pd.DataFrame(pop, index=[2001, 2002, 2003])
+- dicts of Series are treated in much the same way
+  pdata = {'Ohio': frame3['Ohio'][:-1],
+  ....: 'Nevada': frame3['Nevada'][:2]}
+  pd.DataFrame(pdata)
+- if a DataFrame's index and columns have theri name attributes set, these will also be displayed
+  frame3.index.name = 'year'; frame3.columns.name = 'state'
+- as with Series, the values attribute returns the data contained in the DF as a two-dimensional ndarray
+  frame3.values
+- if the DF columns are different dtypes, the dtype of the values array will be chosen to accomodate all of the columns
+  frame2.values
+- possible data inputs to DF constructor
+  -2D ndarray   A matrix of data, passing optional row and column labels
+  - dict of arrays, lists, or tuples Each sequence becomes a column in the DataFrame; all -sequences must be the same length
+- NumPy structured/record array   Treated as the “dict of arrays” case
+- dict of Series   Each value becomes a column; indexes from each Series are unioned together to form the result’s row index if no explicit index is passed
+- dict of dicts    Each inner dict becomes a column; keys are unioned to form the row index as in the “dict of Series” case
+- List of dicts or Series Each item becomes a row in the DataFrame; union of dict keys or Series indexes become the DataFrame’s column labels
+- List of lists or tuples   Treated as the “2D ndarray” case
+- Another DataFrame The DataFrame’s indexes are used unless different ones are passed
+- NumPy MaskedArray Like the “2D ndarray” case except masked values become NA/missing in the DataFrame result
 
 
+#### Index Objects
+- responsible for holding the axis labels and other metadata (like the axis name or names)
+- any array or other sequence of labels you use when constructing a Series or DF is internally converted to an index
+  obj = pd.Series(range(3), index=['a', 'b', 'c'])
+  obj = pd.Series(range(3), index=['a', 'b', 'c'])
+  index
+  index[1:]
+- index objects are immutable and thus can't be modified by the user
+  index[1] = 'd' # TypeError
+- immutability makes it safer to share index objects among data structures
+  labels = pd.Index(np.arange(3))
+  labels
+  obj2 = pd.Series([1.5, -2.5, 0], index=labels)
+  obj2.index is labels
+- an index behaves like a fixed-sized set
+  frame3
+  frame3.columns
+  'Ohio' in frame3.columns
+  2003 in frame3.index
+- unlike python sets, pandas index can contain duplicate labels
+  dup_labels = pd.Index(['foo', 'foo', 'bar', 'bar'])
+- selections with duplicate labels will select all occurances of that label
+- each index has a nnumber of methods and properties for set logic, which answer other common questions about the data it contains
+- some index methods and properties
+  - append Concatenate with additional Index objects, producing a new Index
+  - difference Compute set difference as an Index
+  - intersection Compute set intersection
+  - union Compute set union
+  - isin Compute boolean array indicating whether each value is contained in the passed collection
+  - delete Compute new Index with element at index i deleted
+  - drop Compute new Index by deleting passed values
+  - insert Compute new Index by inserting element at index i
+  - is_monotonic Returns True if each element is greater than or equal to the previous element
+  - is_unique Returns True if the Index has no duplicate values
+  - unique Compute the array of unique values in the Index
 
+#### Essential Functionality
+##### Reindexing
+- create a new object with the data conformed to a new index
+  obj = pd.Series([4.5, 7.2, -5.3, 3.6], index=['d', 'b', 'a', 'c'])
+- calling reindex on this series rearranges the data according to the new index, introducing missing values if any index values were not already present 
+  obj2 = obj.reindex(['a', 'b', 'c', 'd', 'e'])
+- for ordered data like time seies, it may be desirable to do some interpolation or filling of values when reindexing
+- the method option allows this using methods such as ffill
+  obj3 = pd.Series(['blue', 'purple', 'yellow'], index=[0, 2, 4])
+  obj3.reindex(range(6), method='ffill')
+- with DF, reindex can alter the (row) index and/or columns 
+- when passed only a sequence. reindexes rows
+  frame = pd.DataFrame(np.arange(9).reshape((3, 3)),
+  ....: index=['a', 'c', 'd'],
+  ....: columns=['Ohio', 'Texas', 'California'])
+  frame2 = frame.reindex(['a', 'b', 'c', 'd'])
+- the columns can be reindexed with the columns keyword
+  states = ['Texas', 'Utah', 'California']
+  frame.reindex(columns=states)
+- can reindex more succintly by label-indexing with loc
+  frame.loc[['a', 'b', 'c', 'd'], states]
+- reindex function arguments
+  - index New sequence to use as index. Can be Index instance or any other sequence-like Python data structure. An Index will be used exactly as is without any copying.
+  - method Interpolation (fill) method; 'ffill' fills forward, while 'bfill' fills backward.
+  - fill_value Substitute value to use when introducing missing data by reindexing.
+  - limit When forward- or backfilling, maximum size gap (in number of elements) to fill.
+  - tolerance When forward- or backfilling, maximum size gap (in absolute numeric distance) to fill for inexact matches.
+  - level Match simple Index on level of MultiIndex; otherwise select subset of.
+  - copy If True, always copy underlying data even if new index is equivalent to old index; if False, do not copy the data when the indexes are equivalent.
+  
+##### Dropping entries from an axis
+- drop method will retun a new object with the indicated value or values deleted from an axis
+  obj = pd.Series(np.arange(5.), index=['a', 'b', 'c', 'd', 'e'])
+  new_obj = obj.drop('c')
+  obj.drop(['d', 'c'])
+- with DF, index calues can be deleted from either axis
+  data = pd.DataFrame(np.arange(16).reshape((4, 4)),
+  .....: index=['Ohio', 'Colorado', 'Utah', 'New York'],
+  .....: columns=['one', 'two', 'three', 'four'])
+- calling drop with a sequence of labels will drop values fromt he row labels (axis 0)
+  data.drop(['Colorado', 'Ohio'])
+- can drop values from columns by passing axis=1 or axis='columns'
+  data.drop('two', axis=1)
+  data.drop(['two', 'four'], axis='columns')
+- many functions, like drop, which modify the size or shape of a series or DF, can manipulate an object in place without returning a new object
+  obj.drop('c', inplace=True)
+- inplace destroys any data that is dropped
 
+###### Indexing, selection, and filtering
+- series indexing (obj[...]) works analogously to NumPy array indexing, except you can use the series's index values instead of only integers
+  obj = pd.Series(np.arange(4.), index=['a', 'b', 'c', 'd'])
+  obj['b']
+  obj[1]
+  obj[2:4]
+  obj[['b', 'a', 'd']]
+  obj[[1, 3]]
+  obj[obj < 2]
+- slicing with labels behaves different than normal python. End point is inclusive
+  obj['b':'c']
+- setting using these methods modifies the corresponding section of the series
+  obj['b':'c'] = 5
+- indexing into a DF is for retrieving one or more columns either with a single value or sequence
+  data = pd.DataFrame(np.arange(16).reshape((4, 4)),
+  .....: index=['Ohio', 'Colorado', 'Utah', 'New York'],
+  .....: columns=['one', 'two', 'three', 'four'])
+  data['two']
+  data[['three', 'one']]
+- indexing like this has a few special cases. Slicing or selecting with a boolean array
+  data[:2]
+  data[data['three'] > 5]
+- the row selection syntax data[:2] is provided as a convenience
+- passing a single element or a list to the [] operator selects columns
+- another use case is indexing with a boolean DF, such as one produced by a scalar comparison
+  data < 5
+  data[data < 5] = 0
+- this makes DF syntactically more like a two-dimensional NumPy array in this particular case
 
+##### selection with loc and iloc
+- for DF label-indexing on rows
+- enable selection of subset of the rows and columns from a DF with NumPy-like notation using axis labels (loc) or integers (iloc)
+- select single row and multiple columns by label
+  data.loc['Colorado', ['two', 'three']]
+- perform similar selection with integers
+  data.iloc[2, [3, 0, 1]]
+  data.iloc[2]
+  data.iloc[[1, 2], [3, 0, 1]]
+- both idexing functions work with slices in addition to single labels or lists of labels
+  data.loc[:'Utah', 'two']
+  data.iloc[:, :3][data.three > 5]
+- indexing options with DF
+  - df[val] Select single column or sequence of columns from the DataFrame; special case
+conveniences: boolean array (filter rows), slice (slice rows), or boolean DataFrame (set values based on some criterion)
+  - df.loc[val] Selects single row or subset of rows from the DataFrame by label
+  - df.loc[:, val] Selects single column or subset of columns by label
+  - df.loc[val1, val2] Select both rows and columns by label
+  - df.iloc[where] Selects single row or subset of rows from the DataFrame by integer position
+  - df.iloc[:, where] Selects single column or subset of columns by integer position
+  - df.iloc[where_i, where_j] Select both rows and columns by integer position
+  - df.at[label_i, label_j] Select a single scalar value by row and column label
+  - df.iat[i, j] Select a single scalar value by row and column position (integers)
+  - reindex method Select either rows or columns by labels
+  - get_value, set_value methods Select single value by row and column label
+  
+##### integer indexes
+- if you have an axis index containing integers, data selection will always be label-oriented. loc for labels, iloc for integers
+  ser.loc[:1]
+  ser.iloc[:1]
+  
+##### arithmetic and data alignment
+- when adding objects together. if index pairs are not the same, the respective index in
+the result will be the untion of the index pairs
+  s1 = pd.Series([7.3, -2.5, 3.4, 1.5], index=['a', 'c', 'd', 'e'])
+  s2 = pd.Series([-2.1, 3.6, -1.5, 4, 3.1],
+  .....: index=['a', 'c', 'e', 'f', 'g'])
+  s1 + s2
+- internal data alignment introduces missing values in the label locations that don't overlap
+- in the case of SF, alignment is performed on both rows and columns
+  df1 = pd.DataFrame(np.arange(9.).reshape((3, 3)), columns=list('bcd'),
+  .....: index=['Ohio', 'Texas', 'Colorado'])
+  df2 = pd.DataFrame(np.arange(12.).reshape((4, 3)), columns=list('bde'),
+  .....: index=['Utah', 'Ohio', 'Texas', 'Oregon'])
+  df1 + df2
+- since the 'c' and 'e' columns are not in both, they appear as all missing in the result. Same for rows whose labels are not common to both objects
+- if you add DF objects with no column or row labels in common, all nulls
 
-
-
-
-
+##### Arithmetic methods with fill values
+- fill with special value when axis label is in one but not the other
+  In [165]: df1 = pd.DataFrame(np.arange(12.).reshape((3, 4)),
+  .....: columns=list('abcd'))
+  In [166]: df2 = pd.DataFrame(np.arange(20.).reshape((4, 5)),
+  .....: columns=list('abcde'))
+  In [167]: df2.loc[1, 'b'] = np.nan
+  In [170]: df1 + df2
+- using the add method on df1 pases df2 an argument of fill_value
+  In [171]: df1.add(df2, fill_value=0)
+- flexible arithmetic methods
+  - add, radd Methods for addition (+)
+  - sub, rsub Methods for subtraction (-)
+  - div, rdiv Methods for division (/)
+  - floordiv, rfloordiv Methods for floor division (//)
+  - mul, rmul Methods for multiplication (*)
+  - pow, rpow Methods for exponentiation (**)
+- as with numpy arrays of different dimensions, arithmetic between df and series is defined
+  In [175]: arr = np.arange(12.).reshape((3, 4))
+  In [176]: arr
+  Out[176]:
+  array([[ 0., 1., 2., 3.],
+        [ 4., 5., 6., 7.],
+        [ 8., 9., 10., 11.]])
+  In [177]: arr[0]
+  Out[177]: array([ 0., 1., 2., 3.])
+  In [178]: arr - arr[0]
+  Out[178]:
+  array([[ 0., 0., 0., 0.],
+        [ 4., 4., 4., 4.],
+        [ 8., 8., 8., 8.]])
+- subtract arr[0] from arr, the subtraction is performed once for each row
+- referred to as broadcasting 
+- similar with SF and series
+  In [179]: frame = pd.DataFrame(np.arange(12.).reshape((4, 3)),
+  .....: columns=list('bde'),
+  .....: index=['Utah', 'Ohio', 'Texas', 'Oregon'])
+  In [180]: series = frame.iloc[0]
+  In [181]: frame
+  Out[181]:
+           b d e
+  Utah 0.0 1.0 2.0
+  Ohio 3.0 4.0 5.0
+  Texas 6.0 7.0 8.0
+  Oregon 9.0 10.0 11.0
+  In [182]: series
+  Out[182]:
+  b 0.0
+  d 1.0
+  e 2.0
+  Name: Utah, dtype: float64
 
 
 
