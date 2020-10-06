@@ -2360,6 +2360,8 @@ the result will be the untion of the index pairs
   d 1.0
   e 2.0
   Name: Utah, dtype: float64
+- By default, arithmetic between DataFrame and Series matches the index of the Series on the DataFrame’s columns, broadcasting down the rows:
+- If an index value is not found in either the DataFrame’s columns or the Series’s index, the objects will be reindexed to form the union:
 
 
 
