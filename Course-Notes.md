@@ -2364,18 +2364,109 @@ the result will be the untion of the index pairs
 - If an index value is not found in either the DataFrame’s columns or the Series’s index, the objects will be reindexed to form the union:
 
 
+Table 5-8. Descriptive and summary statistics
+- *count*	Number of non-NA values
+- *describe*	Compute set of summary statistics for Series or each DataFrame column
+- *min, max*	Compute minimum and maximum values
+- *argmin, argmax*	Compute index locations (integers) at which minimum or maximum value obtained, respectively
+- *vidxmin, idxmax*	Compute index labels at which minimum or maximum value obtained, respectively
+- *quantile*	Compute sample quantile ranging from 0 to 1
+- *sum*	Sum of values
+- *mean*	Mean of values
+- *median*	Arithmetic median (50% quantile) of values
+- *mad*	Mean absolute deviation from mean value
+- *prod*	Product of all values
+- *var*	Sample variance of values
+- *std*	Sample standard deviation of values
+- *skew*	Sample skewness (third moment) of values
+- *kurt*	Sample kurtosis (fourth moment) of values
+- *cumsum*	Cumulative sum of values
+- *cummin, cummax*	Cumulative minimum or maximum of values, respectively
+- *cumprod*	Cumulative product of values
+- *diff*	Compute first arithmetic difference (useful for time series)
+- *pct_change*	Compute percent changes
+
+
+Table 5-9. Unique, value counts, and set membership methods
+- *isin*	Compute boolean array indicating whether each Series value is contained in the passed sequence of values
+- *get_indexer*	Compute integer indices for each value in an array into another array of distinct values; helpful for data alignment and join-type operations
+- *unique*	Compute array of unique values in a Series, returned in the order observed
+- *value_counts*	Return a Series containing unique values as its index and frequencies as its values, ordered count in descending order
 
 
 
+Table 6-1. Parsing functions in pandas
+- *read_csv*	Load delimited data from a file, URL, or file-like object; use comma as default delimiter
+- *read_fwf*	Read data in fixed-width column format (i.e., no delimiters)
+- *read_clipboard*	Version of read_csv that reads data from the clipboard; useful for converting tables from web pages
+- *read_excel*	Read tabular data from an Excel XLS or XLSX file
+- *read_hdf*	Read HDF5 files written by pandas
+- *read_html*	Read all tables found in the given HTML document
+- *read_json*	Read data from a JSON (JavaScript Object Notation) string representation
+- *read_msgpack*	Read pandas data encoded using the MessagePack binary format
+- *read_pickle*	Read an arbitrary object stored in Python pickle format
+- *read_sas*	Read a SAS dataset stored in one of the SAS system’s custom storage formats
+- *read_sql*	Read the results of a SQL query (using SQLAlchemy) as a pandas DataFrame
+- *read_stata*	Read a dataset from Stata file format
+- *read_feather*	Read the Feather binary file format
+
+
+- A file will not always have a header row. Consider this file:
+
+    In [13]: !cat examples/ex2.csv
+    1,2,3,4,hello
+    5,6,7,8,world
+    9,10,11,12,foo
+- To read this file, you have a couple of options. You can allow pandas to assign default column names, or you can specify names yourself:
+
+    In [14]: pd.read_csv('examples/ex2.csv', header=None)
+    Out[14]: 
+       0   1   2   3      4
+    0  1   2   3   4  hello
+    1  5   6   7   8  world
+    2  9  10  11  12    foo
+
+    In [15]: pd.read_csv('examples/ex2.csv', names=['a', 'b', 'c', 'd', 'message'])
+    Out[15]: 
+       a   b   c   d message
+    0  1   2   3   4   hello
+    1  5   6   7   8   world
+    2  9  10  11  12     foo
 
 
 
+Table 6-2. Some read_csv function arguments
+- *path*	String indicating filesystem location, URL, or file-like object
+- *sep or delimiter*	Character sequence or regular expression to use to split fields in each row
+- *header*	Row number to use as column names; defaults to 0 (first row), but should be None if there is no header row
+- *index_col*	Column numbers or names to use as the row index in the result; can be a single name/number or a list of them for a hierarchical index
+- *names*	List of column names for result, combine with header=None
+- *skiprows*	Number of rows at beginning of file to ignore or list of row numbers (starting from 0) to skip.
+- *na_values*	Sequence of values to replace with NA.
+- *comment*	Character(s) to split comments off the end of lines.
+- *parse_dates*	Attempt to parse data to datetime; False by default. If True, will attempt to parse all columns. Otherwise can - specify a list of column numbers or name to parse. If element of list is tuple or list, will combine multiple columns together - and parse to date (e.g., if date/time split across two columns).
+- *keep_date_col*	If joining columns to parse date, keep the joined columns; False by default.
+- *converters*	Dict containing column number of name mapping to functions (e.g., {'foo': f} would apply the function f to all values in the 'foo' column).
+- *dayfirst*	When parsing potentially ambiguous dates, treat as international format (e.g., 7/6/2012 -> June 7, 2012); False by default.
+- *date_parser*	Function to use to parse dates.
+- *nrows*	Number of rows to read from beginning of file.
+- *iterator*	Return a TextParser object for reading file piecemeal.
+- *chunksize*	For iteration, size of file chunks.
+- *skip_footer*	Number of lines to ignore at end of file.
+- *verbose*	Print various parser output information, like the number of missing values placed in non-numeric columns.
+- *encoding*	Text encoding for Unicode (e.g., 'utf-8' for UTF-8 encoded text).
+- *squeeze*	If the parsed data only contains one column, return a Series.
+- *thousands*	Separator for thousands (e.g., ',' or '.').
 
 
-
-
-
-
+Table 6-3. CSV dialect options
+- *delimiter*	One-character string to separate fields; defaults to ','.
+- *lineterminator*	Line terminator for writing; defaults to '\r\n'. Reader ignores this and recognizes cross-platform line terminators.
+- *quotechar*	Quote character for fields with special characters (like a delimiter); default is '"'.
+- *quoting**	Quoting convention. Options include csv.QUOTE_ALL (quote all fields), csv.QUOTE_MINIMAL (only fields with special - characters like the delimiter), csv.QUOTE_NONNUMERIC, and csv.QUOTE_NONE (no quoting). See Python’s documentation for full - details. Defaults to QUOTE_MINIMAL.
+- *skipinitialspace*	Ignore whitespace after each delimiter; default is False.
+- *doublequote*	How to handle quoting character inside a field; if True, it is doubled (see online documentation for full detail and behavior).
+- *escapechar*	String to escape the delimiter if quoting is set to csv.QUOTE_NONE; disabled by default.
 
 
 
