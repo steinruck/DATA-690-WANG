@@ -2342,6 +2342,7 @@ the result will be the untion of the index pairs
 - subtract arr[0] from arr, the subtraction is performed once for each row
 - referred to as broadcasting 
 - similar with SF and series
+  
   In [179]: frame = pd.DataFrame(np.arange(12.).reshape((4, 3)),
   .....: columns=list('bde'),
   .....: index=['Utah', 'Ohio', 'Texas', 'Oregon'])
