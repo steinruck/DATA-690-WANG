@@ -2471,5 +2471,78 @@ Table 6-3. CSV dialect options
 
 
 
+# CH 7
+Table 7-1. NA handling methods
+- *Argument*	Description
+- *dropna*	Filter axis labels based on whether values for each label have missing data, with varying thresholds for how much missing data to tolerate.
+- *fillna*	Fill in missing data with some value or using an interpolation method such as 'ffill' or 'bfill'.
+- *isnull*	Return boolean values indicating which values are missing/NA.
+- *notnull*	Negation of isnull.
 
-  
+
+Table 7-2. fillna function arguments
+- *Argument*	Description
+- *value*	Scalar value or dict-like object to use to fill missing values
+- *method*	Interpolation; by default 'ffill' if function called with no other arguments
+- *axis*	Axis to fill on; default axis=0
+- *inplace*	Modify the calling object without producing a copy
+- *limit*	For forward and backward filling, maximum number of consecutive periods to fill
+
+
+Table 7-3. Python built-in string methods
+- *count*	Return the number of non-overlapping occurrences of substring in the string.
+- *endswith*	Returns True if string ends with suffix.
+- *startswith*	Returns True if string starts with prefix.
+- *join*	Use string as delimiter for concatenating a sequence of other strings.
+- *index*	Return position of first character in substring if found in the string; raises ValueError if not found.
+- *find*	Return position of first character of first occurrence of substring in the string; like index, but returns –1 if not found.
+- *rfind*	Return position of first character of last occurrence of substring in the string; returns –1 if not found.
+- *replace*	Replace occurrences of string with another string.
+- *strip, rstrip, lstrip*	Trim whitespace, including newlines; equivalent to x.strip() (and rstrip, lstrip, respectively) for each element.
+- *split*	Break string into list of substrings using passed delimiter.
+- *lower*	Convert alphabet characters to lowercase.
+- *upper*	Convert alphabet characters to uppercase.
+- *casefold*	Convert characters to lowercase, and convert any region-specific variable character combinations to a common comparable form.
+- *ljust, rjust*	Left justify or right justify, respectively; pad opposite side of string with spaces (or some other fill character) to return a string with a minimum width.  
+
+
+Table 7-4. Regular expression methods
+- *findall*	Return all non-overlapping matching patterns in a string as a list
+- *finditer*	Like findall, but returns an iterator
+- *match*	Match pattern at start of string and optionally segment pattern components into groups; if the pattern matches, returns a match object, and otherwise None
+- *search*	Scan string for match to pattern; returning a match object if so; unlike match, the match can be anywhere in the string as opposed to only at the beginning
+- *split*	Break string into pieces at each occurrence of pattern
+- *sub, subn*	Replace all (sub) or first n occurrences (subn) of pattern in string with replacement expression; use symbols \1, \2, ... to refer to match group elements in the replacement string
+
+
+
+Table 7-5. Partial listing of vectorized string methods
+- *cat*	Concatenate strings element-wise with optional delimiter
+ -*contains*	Return boolean array if each string contains pattern/regex
+- *count*	Count occurrences of pattern
+- *extract*	Use a regular expression with groups to extract one or more strings from a Series of strings; the result will be a DataFrame with one column per group
+- *endswith*	Equivalent to x.endswith(pattern) for each element
+- *startswith*	Equivalent to x.startswith(pattern) for each element
+- *findall*	Compute list of all occurrences of pattern/regex for each string
+- *get*	Index into each element (retrieve i-th element)
+- *isalnum*	Equivalent to built-in str.alnum
+- *isalpha*	Equivalent to built-in str.isalpha
+- *isdecimal*	Equivalent to built-in str.isdecimal
+- *isdigit*	Equivalent to built-in str.isdigit
+- *islower*	Equivalent to built-in str.islower
+- *isnumeric*	Equivalent to built-in str.isnumeric
+- *isupper*	Equivalent to built-in str.isupper
+- *join*	Join strings in each element of the Series with passed separator
+- *len*	Compute length of each string
+- *lower, upper*	Convert cases; equivalent to x.lower() or x.upper() for each element
+- *match*	Use re.match with the passed regular expression on each element, returning True or False whether it matches.
+- *extract*	Extract captured group element (if any) by index from each string
+- *pad*	Add whitespace to left, right, or both sides of strings
+- *center*	Equivalent to pad(side='both')
+- *repeat*	Duplicate values (e.g., s.str.repeat(3) is equivalent to x * 3 for each string)
+- *replace*	Replace occurrences of pattern/regex with some other string
+- *slice*	Slice each string in the Series
+- *split*	Split strings on delimiter or regular expression
+- *strip*	Trim whitespace from both sides, including newlines
+- *rstrip*	Trim whitespace on right side
+- *lstrip*	Trim whitespace on left side
