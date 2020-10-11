@@ -26,7 +26,6 @@
     - are there any failed/successful remote logins
     - were there any privelege escalation attempts?
         - what commands were run
-    - 
 
 ### 4. Where do you get the data to help answer your questions?
     - http://www.secrepo.com/auth.log/auth.log.gz
