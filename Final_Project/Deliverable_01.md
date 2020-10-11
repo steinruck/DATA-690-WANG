@@ -9,7 +9,7 @@
     - logs remote logins
 
 ### 2. Why is this issue important to you and/or to others?
-- As a network analyst, one of my tasks is to analyze network traffic in order to determine what is happening in the network. We track access vectors and types of traffic as well as parsing through authentication logs and network connections. Surprisingly, my office does not have a data scientist. As such, we waste a lot of time copying and pasting data into spreadsheets instead of using data cleansing, visualization, descriptive statistics, or any other form of analysis that could be vastly helpful. Performing analysis on this data in particular will help me recognize malicious traffic in networks as well as understand what access vectors are taken advantage of. It will also help to identify different types of devices in networks and what they are used for.
+    - As a network analyst, one of my tasks is to analyze network traffic in order to determine what is happening in the network. We track access vectors and types of traffic as well as parsing through authentication logs and network connections. Surprisingly, my office does not have a data scientist. As such, we waste a lot of time copying and pasting data into spreadsheets instead of using data cleansing, visualization, descriptive statistics, or any other form of analysis that could be vastly helpful. Performing analysis on this data in particular will help me recognize malicious traffic in networks as well as understand what access vectors are taken advantage of. It will also help to identify different types of devices in networks and what they are used for.
 
 ### 3. What questions do you have in mind and would like to answer?
     - What IPs try to authenticate?
